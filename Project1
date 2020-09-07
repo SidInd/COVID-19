@@ -1,0 +1,41 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+from google.colab import files
+uploaded = files.upload()
+
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.utils import to_categorical
+
+import io
+Case = pd.read_csv(io.BytesIO(uploaded['Case.csv']))
+PatientInfo = pd.read_csv(io.BytesIO(uploaded['PatientInfo.csv']))
+Policy = pd.read_csv(io.BytesIO(uploaded['Policy.csv']))
+Region = pd.read_csv(io.BytesIO(uploaded['Region.csv']))
+SearchTrend = pd.read_csv(io.BytesIO(uploaded['SearchTrend.csv']))
+#SeoulFloating = pd.read_csv(io.BytesIO(uploaded['SeoulFloating.csv']))
+Time = pd.read_csv(io.BytesIO(uploaded['Time.csv']))
+TimeAge = pd.read_csv(io.BytesIO(uploaded['TimeAge.csv']))
+TimeGender = pd.read_csv(io.BytesIO(uploaded['TimeGender.csv']))
+TimeProvince = pd.read_csv(io.BytesIO(uploaded['TimeProvince.csv']))
+Weather = pd.read_csv(io.BytesIO(uploaded['Weather.csv']))
+
+Predictions = pd.read_excel(io.BytesIO(uploaded['Predictions.xlsx']))
+
+model = Sequential()
+
+n_cols = Case.shape[1]
+target = Case['Category']
+target = to_categorical(target)
+
+model.add(Dense(5, activation='relu', input_shape=(n_cols,)))
+model.add(Dense(5, activation='relu'))
+model.add(Dense(4, activation='softmax'))
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.fit(predictors, target, epochs=10)
+
+model.predict(test_data)
